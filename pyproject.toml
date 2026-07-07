@@ -28,3 +28,6 @@ ignore = ["B008"]  # FastAPI uses Depends() in defaults
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
 testpaths = ["tests"]
+# Put the repo root on sys.path so `import app` works under the bare `pytest`
+# console script (CI), not just `python -m pytest`.
+pythonpath = ["."]
