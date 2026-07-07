@@ -51,3 +51,7 @@ class PayloadTooLargeError(AppError):
 
 class UnsupportedMediaTypeError(AppError):
     status_code = 415
+
+
+class BadGatewayError(AppError):
+    status_code = 502

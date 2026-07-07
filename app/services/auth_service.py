@@ -53,6 +53,7 @@ def signup(payload: SignupRequest) -> dict:
             "dob": fields.get("dob"),
             "gender": fields.get("gender"),
             "reading_preferences": fields.get("reading_preferences") or [],
+            "yearly_goal_books": fields.get("yearly_goal_books") or 12,
         }
     )
     tokens = _issue_tokens(user["id"])

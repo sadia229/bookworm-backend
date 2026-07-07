@@ -12,6 +12,7 @@ class SignupRequest(BaseModel):
     dob: date | None = None
     gender: Gender | None = None
     reading_preferences: list[Genre] | None = Field(default=None, max_length=10)
+    yearly_goal_books: int | None = Field(default=None, ge=1, le=365)
 
     @field_validator("password")
     @classmethod

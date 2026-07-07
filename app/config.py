@@ -17,6 +17,14 @@ class Settings(BaseSettings):
 
     firebase_credentials_json: str = ""
 
+    # --- RevenueCat (v1.1 monetization) ---
+    # Shared secret configured in the RevenueCat dashboard webhook Authorization
+    # header; the secret REST API key (v1) for the /subscribers fallback; and the
+    # entitlement identifier that grants premium.
+    revenuecat_webhook_secret: str = ""
+    revenuecat_api_key: str = ""
+    revenuecat_entitlement_id: str = "premium"
+
     cors_origins: str = "*"
     environment: str = "development"
 

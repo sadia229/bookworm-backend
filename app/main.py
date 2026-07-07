@@ -14,6 +14,7 @@ from app.routers import (
     books,
     leaderboard,
     notifications,
+    premium,
     progress,
     reviews,
     stats,
@@ -46,6 +47,7 @@ for router in (
     leaderboard.router,
     stats.router,
     notifications.router,
+    premium.router,
 ):
     api_v1.include_router(router)
 

@@ -40,6 +40,7 @@ class MemoryStore:
     notifications: dict[str, dict[str, Any]] = field(default_factory=dict)
     refresh_tokens: dict[str, dict[str, Any]] = field(default_factory=dict)
     password_reset_tokens: dict[str, dict[str, Any]] = field(default_factory=dict)
+    webhook_events: set[str] = field(default_factory=set)
 
 
 class MemoryUserRepository:
@@ -65,6 +66,10 @@ class MemoryUserRepository:
             "books_completed": 0,
             "world_stage": 0,
             "is_premium": fields.get("is_premium", False),
+            "premium_until": fields.get("premium_until"),
+            "daily_goal_pages": fields.get("daily_goal_pages", 10),
+            "yearly_goal_books": fields.get("yearly_goal_books", 12),
+            "reminder_time": fields.get("reminder_time", "20:00"),
             "created_at": now,
             "updated_at": now,
         }
@@ -598,3 +603,14 @@ class MemoryPasswordResetRepository:
     def mark_used(self, reset_id: str) -> None:
         if reset_id in self.store.password_reset_tokens:
             self.store.password_reset_tokens[reset_id]["used"] = True
+
+
+class MemoryWebhookEventRepository:
+    def __init__(self, store: MemoryStore) -> None:
+        self.store = store
+
+    def was_processed(self, event_id: str) -> bool:
+        return event_id in self.store.webhook_events
+
+    def mark_processed(self, event_id: str) -> None:
+        self.store.webhook_events.add(event_id)

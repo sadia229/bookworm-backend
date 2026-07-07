@@ -15,6 +15,11 @@ from app.db import container
 @pytest.fixture(autouse=True)
 def fresh_repos():
     """Reset to a clean in-memory database before each test."""
+    from app.core import rate_limit
+
+    # Rate-limit buckets are a module-global sliding window; without clearing
+    # them, the many signups across the suite would trip the 5/hour signup limit.
+    rate_limit._buckets.clear()
     container.use_memory()
     yield
     container.set_repositories(None)

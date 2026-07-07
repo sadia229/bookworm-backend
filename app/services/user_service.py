@@ -21,6 +21,10 @@ def _serialize_full(user: dict) -> dict:
         "books_completed": user["books_completed"],
         "world_stage": user["world_stage"],
         "is_premium": user["is_premium"],
+        "premium_until": iso(user.get("premium_until")),
+        "daily_goal_pages": user.get("daily_goal_pages", 10),
+        "yearly_goal_books": user.get("yearly_goal_books", 12),
+        "reminder_time": user.get("reminder_time", "20:00"),
         "created_at": iso(user["created_at"]),
         "updated_at": iso(user["updated_at"]),
     }

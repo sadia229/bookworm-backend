@@ -14,3 +14,13 @@ def get_dashboard(
 ) -> JSONResponse:
     data = stats_service.get_dashboard(user_id, tz)
     return JSONResponse(status_code=200, content=success(data, "Dashboard retrieved"))
+
+
+@router.get("/stats/wrapped")
+def get_wrapped(
+    month: str | None = None,
+    user_id: str = Depends(get_current_user_id),
+    tz: str = Depends(get_timezone),
+) -> JSONResponse:
+    data = stats_service.get_wrapped(user_id, month, tz)
+    return JSONResponse(status_code=200, content=success(data, "Wrapped stats retrieved"))

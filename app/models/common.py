@@ -42,6 +42,13 @@ class LeaderboardPeriod(str, Enum):
 
 
 _PASSWORD_RE = re.compile(r"^(?=.*[A-Za-z])(?=.*\d).{8,128}$")
+_REMINDER_TIME_RE = re.compile(r"^([01]\d|2[0-3]):[0-5]\d$")
+
+
+def validate_reminder_time(value: str) -> str:
+    if not _REMINDER_TIME_RE.match(value):
+        raise ValueError("reminder_time must be HH:mm in 24-hour format")
+    return value
 
 
 def validate_password_strength(password: str) -> str:

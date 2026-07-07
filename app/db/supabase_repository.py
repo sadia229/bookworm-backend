@@ -486,3 +486,21 @@ class SupabasePasswordResetRepository:
         get_supabase().table("password_reset_tokens").update({"used": True}).eq(
             "id", reset_id
         ).execute()
+
+
+class SupabaseWebhookEventRepository:
+    def was_processed(self, event_id: str) -> bool:
+        res = (
+            get_supabase()
+            .table("processed_webhook_events")
+            .select("id")
+            .eq("id", event_id)
+            .execute()
+        )
+        return bool(res.data)
+
+    def mark_processed(self, event_id: str) -> None:
+        # upsert so a racing redelivery of the same event.id can't 409.
+        get_supabase().table("processed_webhook_events").upsert(
+            {"id": event_id}, on_conflict="id"
+        ).execute()

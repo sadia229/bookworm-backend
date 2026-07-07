@@ -14,9 +14,10 @@ def test_update_me(client, auth):
     assert resp.json()["data"]["display_name"] == "New Name"
 
 
-def test_update_me_empty_body_422(client, auth):
+def test_update_me_empty_body_400(client, auth):
+    # api-doc.md: empty body -> 400 "No fields provided to update".
     resp = client.patch("/api/v1/users/me", headers=auth["headers"], json={})
-    assert resp.status_code == 422
+    assert resp.status_code == 400
 
 
 def test_public_profile_hidden_name(client, auth):

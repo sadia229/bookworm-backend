@@ -21,6 +21,7 @@ class Repositories:
     notifications: object
     refresh_tokens: object
     password_resets: object
+    webhook_events: object
 
 
 def build_supabase_repositories() -> Repositories:
@@ -33,6 +34,7 @@ def build_supabase_repositories() -> Repositories:
         notifications=sup.SupabaseNotificationRepository(),
         refresh_tokens=sup.SupabaseRefreshTokenRepository(),
         password_resets=sup.SupabasePasswordResetRepository(),
+        webhook_events=sup.SupabaseWebhookEventRepository(),
     )
 
 
@@ -47,6 +49,7 @@ def build_memory_repositories() -> Repositories:
         notifications=mem.MemoryNotificationRepository(store),
         refresh_tokens=mem.MemoryRefreshTokenRepository(store),
         password_resets=mem.MemoryPasswordResetRepository(store),
+        webhook_events=mem.MemoryWebhookEventRepository(store),
     )
 
 

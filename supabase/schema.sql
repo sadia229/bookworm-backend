@@ -25,11 +25,30 @@ create table if not exists public.users (
   books_completed integer not null default 0,
   world_stage integer not null default 0,
   is_premium boolean not null default false,
+  premium_until timestamptz,
+  daily_goal_pages integer not null default 10,
+  yearly_goal_books integer not null default 12,
+  reminder_time text not null default '20:00',
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
 
 create index if not exists idx_users_books_completed on public.users (books_completed desc, points desc, updated_at desc);
+
+-- v1.1 monetization/growth columns (safe to re-run on an existing users table).
+alter table public.users add column if not exists premium_until timestamptz;
+alter table public.users add column if not exists daily_goal_pages integer not null default 10;
+alter table public.users add column if not exists yearly_goal_books integer not null default 12;
+alter table public.users add column if not exists reminder_time text not null default '20:00';
+
+-- ---------------------------------------------------------------------------
+-- processed_webhook_events -- idempotency ledger for RevenueCat webhooks
+-- (dedupe by RevenueCat's event.id so a redelivered event is a no-op).
+-- ---------------------------------------------------------------------------
+create table if not exists public.processed_webhook_events (
+  id text primary key,
+  created_at timestamptz not null default now()
+);
 
 -- ---------------------------------------------------------------------------
 -- refresh_tokens -- rotation + reuse detection
@@ -161,6 +180,7 @@ alter table public.reading_sessions enable row level security;
 alter table public.bookmarks enable row level security;
 alter table public.device_tokens enable row level security;
 alter table public.notifications enable row level security;
+alter table public.processed_webhook_events enable row level security;
 
 -- ---------------------------------------------------------------------------
 -- Leaderboard views -- weekly finish counts + a users+weekly join used by the
